@@ -8,10 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SwitchTabsTest {
     WebDriver driver;
     int demoPauseInSeconds = 3;
+    Logger logger = LoggerFactory.getLogger(SwitchTabsTest.class);
 
     @BeforeAll
     public static void driverSetup() {
@@ -29,7 +32,7 @@ public class SwitchTabsTest {
     }
 
     @Test
-    public void switchToTheNewTabTest() {
+    public void switchToTheNewTabTest() throws InterruptedException{
         //Save the first tab's ID
         String firstTab = driver.getWindowHandle();
         //Switch to the new tab
@@ -47,7 +50,7 @@ public class SwitchTabsTest {
     }
 
     @Test
-    public void switchBetweenExistingTabsTest() {
+    public void switchBetweenExistingTabsTest() throws InterruptedException {
         //Get two opened tabs
         prepareTabs();
         //Save the current tab's ID
@@ -72,11 +75,12 @@ public class SwitchTabsTest {
     }
 
 
-    private void demoPause() {
+    private void demoPause() throws InterruptedException {
         try {
             Thread.sleep(demoPauseInSeconds * 1000);
         } catch (InterruptedException e) {
-            System.out.println("InterruptedException");
+            logger.error("Got InterruptedException while pausing.");
+            throw e;
         }
     }
 

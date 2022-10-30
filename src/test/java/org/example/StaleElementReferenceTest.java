@@ -14,6 +14,8 @@ import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v104.dom.DOM;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
@@ -21,6 +23,7 @@ public class StaleElementReferenceTest {
 
     WebDriver driver;
     int timeoutInSeconds = 10;
+    Logger logger = LoggerFactory.getLogger(StaleElementReferenceTest.class);
 
     @BeforeAll
     public static void driverSetup() {
@@ -45,10 +48,10 @@ public class StaleElementReferenceTest {
         driver.get(url);
         WebElement element = getElement(xpath);
         text = getTextOfAPossibleStaleElement(element, xpath);
-        printText(text, "1");
+        logger.info("1:\n" + text);
         makeElementsStale();
         text = getTextOfAPossibleStaleElement(element, xpath);
-        printText(text, "2");
+        logger.info("2:\n" + text);
     }
 
 //    @Test
@@ -59,12 +62,12 @@ public class StaleElementReferenceTest {
         driver.get(url);
         WebElement element = getElement(xpath);
         text = element.getText();
-        printText(text, "1");
+        logger.info("1:\n" + text);
 
         //TODO Doesn't work that way, need to search for more info.
         DevTools devTools = ((ChromeDriver) driver).getDevTools();
         devTools.addListener(DOM.documentUpdated(), event -> {
-            System.out.println("=== Caught DOM change! ===");
+            logger.info("=== Caught DOM change! ===");
         });
         makeElementsStale();
     }
@@ -78,20 +81,13 @@ public class StaleElementReferenceTest {
         driver.navigate().refresh();
     }
 
-    private void printText(String text, String addMessage) {
-        System.out.println(addMessage);
-        System.out.println("---------------------------------");
-        System.out.println(text);
-        System.out.println("---------------------------------");
-    }
-
     private String getTextOfAPossibleStaleElement(WebElement element, String xpath) {
         String result;
         try {
             result = element.getText();
-            printText("The element was not stale.", "getTextOfAPossibleStaleElement");
+            logger.info("\"getTextOfAPossibleStaleElement\": The element was not stale.");
         } catch(StaleElementReferenceException e) {
-            printText("Caught StaleElementReferenceException.", "getTextOfAPossibleStaleElement");
+            logger.info("\"getTextOfAPossibleStaleElement\": Caught StaleElementReferenceException.");
             WebElement refreshedElement = getElement(xpath);
             result = refreshedElement.getText();
         }
