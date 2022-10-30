@@ -18,8 +18,8 @@ public class FreegeoipTest {
 
     //That's not a good way to keep credentials.
     //You should use more sophisticated secrets providing mechanisms in production.
-    String key = "5e0e83dca90497afbd3692867075614b";
-    Logger logger = LoggerFactory.getLogger(FreegeoipTest.class);
+    private String key = "5e0e83dca90497afbd3692867075614b";
+    private Logger logger = LoggerFactory.getLogger(FreegeoipTest.class);
 
     @Test
     public void freegeoipTest() throws IOException, InterruptedException {

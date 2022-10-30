@@ -21,9 +21,11 @@ import java.time.Duration;
 
 public class StaleElementReferenceTest {
 
-    WebDriver driver;
-    int timeoutInSeconds = 10;
-    Logger logger = LoggerFactory.getLogger(StaleElementReferenceTest.class);
+    private static final int TIMEOUT_IN_SECONDS = 10;
+
+    private WebDriver driver;
+    private WebDriverWait wait;
+    private Logger logger = LoggerFactory.getLogger(StaleElementReferenceTest.class);
 
     @BeforeAll
     public static void driverSetup() {
@@ -33,6 +35,7 @@ public class StaleElementReferenceTest {
     @BeforeEach
     public void driverInit() {
         driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_IN_SECONDS));
     }
 
     @AfterEach
@@ -73,8 +76,7 @@ public class StaleElementReferenceTest {
     }
 
     private WebElement getElement(String xpath) {
-        return new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+        return wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
     }
 
     private void makeElementsStale() {

@@ -17,16 +17,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnloadPageTest {
 
+    private static final int TIMEOUT_IN_SECONDS = 3;
+    private static final int WAIT_STEP_MILLIS = 500;
+
     private WebDriver driver;
     private WebDriverWait wait;
-    private final int timeoutInSeconds = 3;
-    private final Logger logger = LoggerFactory.getLogger(UnloadPageTest.class);
+    private Logger logger = LoggerFactory.getLogger(UnloadPageTest.class);
 
 
     @BeforeAll
@@ -37,7 +40,7 @@ public class UnloadPageTest {
     @BeforeEach
     public void driverInit() {
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_IN_SECONDS));
     }
 
     @AfterEach
@@ -73,9 +76,8 @@ public class UnloadPageTest {
         String originalTitle = driver.getTitle();
 
         driver.get(otherUrl);
-        String currentTitle = driver.getTitle();
 
-        assertNotEquals(originalTitle, currentTitle);
+        assertTrue(waitForThePageToUnload(originalTitle));
     }
 
     @SuppressWarnings("unchecked")
@@ -108,6 +110,25 @@ public class UnloadPageTest {
             logger.info("The page is not unloaded!");
             return false;
         }
+    }
+
+    private boolean waitForThePageToUnload(String title) {
+        long deadline = new Date().getTime() + TIMEOUT_IN_SECONDS * 1000;
+        while (new Date().getTime() < deadline) {
+            if(title.equals(driver.getTitle())) {
+                try {
+                    Thread.sleep(WAIT_STEP_MILLIS);
+                } catch (InterruptedException e) {
+                    logger.error("Caught InterruptedException while waiting for the page to unload.\n" + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                logger.info("The page is unloaded.");
+                return true;
+            }
+        }
+        logger.info("The page is not unloaded!");
+        return false;
     }
 
 }

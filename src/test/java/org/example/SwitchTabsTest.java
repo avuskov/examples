@@ -12,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SwitchTabsTest {
-    WebDriver driver;
-    int demoPauseInSeconds = 3;
-    Logger logger = LoggerFactory.getLogger(SwitchTabsTest.class);
+
+    private static final int DEMO_PAUSE_IN_SECONDS = 3;
+    
+    private WebDriver driver;
+    private Logger logger = LoggerFactory.getLogger(SwitchTabsTest.class);
 
     @BeforeAll
     public static void driverSetup() {
@@ -77,7 +79,7 @@ public class SwitchTabsTest {
 
     private void demoPause() throws InterruptedException {
         try {
-            Thread.sleep(demoPauseInSeconds * 1000);
+            Thread.sleep(DEMO_PAUSE_IN_SECONDS * 1000);
         } catch (InterruptedException e) {
             logger.error("Got InterruptedException while pausing.");
             throw e;
