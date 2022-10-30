@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpClient;
-import java.net.http.HttpClient.Version;
-import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.net.URI;
@@ -73,8 +71,7 @@ public class FreegeoipTest {
 
     private JSONObject getParsedResponse(HttpResponse<String> response) {
         String responseBody = response.body();
-        JSONObject parsedObject = new JSONObject(responseBody);
-        return parsedObject;
+        return new JSONObject(responseBody);
     }
 
 }
