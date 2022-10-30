@@ -13,7 +13,6 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.net.URI;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FreegeoipTest {
 
