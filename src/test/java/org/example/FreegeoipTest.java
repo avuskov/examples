@@ -59,10 +59,10 @@ public class FreegeoipTest {
         try {
             response = client.send(request, BodyHandlers.ofString());
         } catch(IOException e) {
-            logger.error("Got IOException on calling " + api);
+            logger.error("Got IOException on calling " + api.replace(key, "***"));
             throw e;
         } catch(InterruptedException e) {
-            logger.error("Got InterruptedException on calling " + api);
+            logger.error("Got InterruptedException on calling " + api.replace(key, "***"));
             throw e;
         }
         return response;
